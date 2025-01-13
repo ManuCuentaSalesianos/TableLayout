@@ -1,5 +1,6 @@
 package com.example.tablelayout
 
+import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,16 +8,25 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.tablelayout.DB.DBConexion
 
 class ContactosFragment : Fragment() {
     protected var mRecyclerView: RecyclerView? = null
     protected var mAdapter: ControladorRecyclerView? = null
     protected var mLayoutManager: RecyclerView.LayoutManager? = null
-    val listaContactos = ArrayList<Contacto>()
+    var listaContactos = ArrayList<Contacto>()
+
+    var conexion1: DBConexion? = null
+    var db: SQLiteDatabase? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        inciarRecogidaDatos()
+        conexion1 = DBConexion(this.context)
+        db = conexion1!!.writableDatabase
+
+        if (db != null) {
+            inciarRecogidaDatos(conexion1, db)
+        }
     }
 
     override fun onCreateView(
@@ -45,27 +55,9 @@ class ContactosFragment : Fragment() {
         return rootView
     }
 
-    private fun inciarRecogidaDatos() {
-        val cont1 = Contacto("Contacto 1","contacto1@gmail.com","125454356", R.drawable.contacto)
-        val cont2 = Contacto("Contacto 2","contacto2@gmail.com","321445453",R.drawable.contacto)
-        val cont3 = Contacto("Contacto 3","contacto3@gmail.com","125454356", R.drawable.contacto)
-        val cont4 = Contacto("Contacto 4","contacto4@gmail.com","321445453",R.drawable.contacto)
-        val cont5 = Contacto("Contacto 5","contacto5@gmail.com","125454376", R.drawable.contacto)
-        val cont6 = Contacto("Contacto 6","contacto6@gmail.com","321449463",R.drawable.contacto)
-        val cont7 = Contacto("Contacto 7","contacto7@gmail.com","225434376", R.drawable.contacto)
-        val cont8 = Contacto("Contacto 8","contacto8@gmail.com","311475453",R.drawable.contacto)
-        val cont9 = Contacto("Contacto 9","contacto9@gmail.com","135464376", R.drawable.contacto)
-        val cont10 = Contacto("Contacto 10","contacto10@gmail.com","321745453",R.drawable.contacto)
-
-        listaContactos.add(cont1)
-        listaContactos.add(cont2)
-        listaContactos.add(cont3)
-        listaContactos.add(cont4)
-        listaContactos.add(cont5)
-        listaContactos.add(cont6)
-        listaContactos.add(cont7)
-        listaContactos.add(cont8)
-        listaContactos.add(cont9)
-        listaContactos.add(cont10)
+    private fun inciarRecogidaDatos(conexion: DBConexion?, db: SQLiteDatabase?) {
+        if (conexion != null) {
+            listaContactos = conexion.selectContactos(db) as ArrayList<Contacto>
+        }
     }
 }

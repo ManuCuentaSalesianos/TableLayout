@@ -53,8 +53,8 @@ public class DBConexion extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public ArrayList selectContactos (SQLiteDatabase db) {
-        ArrayList contactos = new ArrayList<Contacto>();
+    public ArrayList<Contacto> selectContactos (SQLiteDatabase db) {
+        ArrayList<Contacto> contactos = new ArrayList<Contacto>();
 
         //Consultamos los datos
         Cursor c = db.rawQuery(SENTENCIA_SELECCION_CONTACTOS, null);
