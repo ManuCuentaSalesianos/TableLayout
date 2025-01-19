@@ -19,6 +19,7 @@ import com.example.tablelayout.databinding.ActivityAgregarContactoBinding
 class agregarContacto : AppCompatActivity() {
 
     private lateinit var botonAceptar: Button
+    private lateinit var botonCancelar: Button
     private lateinit var txtNombre: EditText
     private lateinit var txtEmail: EditText
     private lateinit var txtTelefono: EditText
@@ -33,9 +34,10 @@ class agregarContacto : AppCompatActivity() {
 
         //Obtiene las referencias de los objetos del layout
         txtNombre = findViewById(R.id.txtNombre)
-        txtEmail = findViewById(R.id.txtEmail)
         txtTelefono = findViewById(R.id.txtTelefono)
-        botonAceptar = findViewById(R.id.botonAceptar)
+        txtEmail = findViewById(R.id.txtEmail)
+        botonAceptar = findViewById(R.id.botonAceptarAgregar)
+        botonCancelar = findViewById(R.id.botonCancelarAgregar)
 
         //Crea el objeto conexión con la ventana actual
         /* Estas sentencias de conexión y obtención de la base de datos se repiten
@@ -45,14 +47,8 @@ class agregarContacto : AppCompatActivity() {
 
         botonAceptar.setOnClickListener {
             val intent = Intent()
-
-            //Recoge en variables lo que está escrito en los campos de texto de la ventana
-            val nombre = txtNombre.text.toString()
-            val email = txtEmail.text.toString()
-            val telefono = txtTelefono.text.toString()
-
             //Creo un nuevo objeto contacto tomando los valores escritos en los campos de texto
-            val contactoNuevo = Contacto(nombre, email, telefono, 0)
+            val contactoNuevo = Contacto(txtNombre.text.toString(), txtEmail.text.toString(), txtTelefono.text.toString(), 0)
 
             //Intenta insertarlos en la base de datos el objeto contactoNuevo
             if(db != null) {
@@ -61,7 +57,15 @@ class agregarContacto : AppCompatActivity() {
 
             //Muestra un aviso de que se ha añadido un nuevo contacto
             Toast.makeText(this, "Se ha añadido un nuevo contacto", Toast.LENGTH_LONG).show()
+            intent.putExtra("Nombre", txtNombre.toString())
+            intent.putExtra("Email", txtEmail.toString())
+            intent.putExtra("Telefono", txtTelefono.toString())
             setResult(Activity.RESULT_OK, intent)
+            finish()
+        }
+        botonCancelar.setOnClickListener {
+            val intent = Intent()
+            setResult(Activity.RESULT_CANCELED, intent)
             finish()
         }
     }

@@ -1,10 +1,12 @@
 package com.example.tablelayout
 
+import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,16 +16,18 @@ class ContactosFragment : Fragment() {
     protected var mRecyclerView: RecyclerView? = null
     protected var mAdapter: ControladorRecyclerView? = null
     protected var mLayoutManager: RecyclerView.LayoutManager? = null
-    var listaContactos = ArrayList<Contacto>()
+    lateinit var recyclerView: RecyclerView
+    lateinit var btnNuevoContacto : Button
 
     var conexion1: DBConexion? = null
     var db: SQLiteDatabase? = null
+    var listaContactos = ArrayList<Contacto>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        conexion1 = DBConexion(this.context)
-        db = conexion1!!.writableDatabase
 
+        conexion1 = DBConexion(requireContext())
+        db = conexion1!!.writableDatabase
         if (db != null) {
             inciarRecogidaDatos(conexion1, db)
         }
@@ -35,13 +39,19 @@ class ContactosFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val rootView: View = inflater.inflate(R.layout.fragment_contactos, container, false)
-        rootView.tag = "Contactos Fragment"
+        rootView.tag = "ContactosFragment"
+
+        btnNuevoContacto = rootView.findViewById(R.id.btnNuevoContacto)
+        btnNuevoContacto.setOnClickListener {
+            val intent = Intent(this.context, agregarContacto::class.java)
+            startActivity(intent)
+        }
 
         //Creamos el objeto controlador del recycler View, programado anteriormente
         mAdapter = ControladorRecyclerView(listaContactos)
 
 
-        val recyclerView: RecyclerView = rootView.findViewById(R.id.recycleViewListaContactos)
+        recyclerView = rootView.findViewById(R.id.recycleViewListaContactos)
 
         //Este sería para definir el deslizamineto de los items reciclerview
         recyclerView.layoutManager = LinearLayoutManager(context)

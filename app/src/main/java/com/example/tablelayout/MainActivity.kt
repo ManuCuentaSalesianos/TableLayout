@@ -1,5 +1,6 @@
 package com.example.tablelayout
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -11,6 +12,7 @@ import android.widget.Toolbar
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -23,7 +25,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var ventanaDeslizante: ViewPager
     private lateinit var tablayout: TabLayout
     private lateinit var txtTexto: TextView
-    private lateinit var barra: Toolbar
 
     //private lateinit var barra: Toolbar
     override fun onCreate(savedInstanceState: Bundle?) {

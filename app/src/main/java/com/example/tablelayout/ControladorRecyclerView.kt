@@ -28,7 +28,7 @@ class ControladorRecyclerView(private val contactosList: ArrayList<Contacto>): R
         holder.nombre?.text = contacto.nombre
         holder.email?.text = contacto.email
         holder.telefono?.text = contacto.telefono
-        holder.foto?.setImageResource(contacto.foto)
+//        holder.foto?.setImageResource(contacto.foto)
     }
 }
 

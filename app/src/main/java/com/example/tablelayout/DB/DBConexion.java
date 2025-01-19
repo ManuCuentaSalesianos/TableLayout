@@ -19,18 +19,18 @@ public class DBConexion extends SQLiteOpenHelper {
 
     //Tabla contactos
     private static final String TABLA_CONTACTOS = "contactos";
-    private static final String CONTACTO_ID = "_id";
+    private static final String CONTACTO_ID = " _id";
     private static final String CONTACTO_NOMBRE = "nombre";
     private static final String CONTACTO_TLFNO = "telefono";
     private static final String CONTACTO_EMAIL = "email";
     private static final String SENTENCIA_CREACION_TABLA_CONTACTOS = "create table contactos" +
             "(_id integer not null, nombre text not null, telefono text not null, email text not null);";
 
-    private static final String SENTENCIA_ACTUALIZACION_TABLA_CONTACTOS = "UPDATE contactos add column" +
-            " apodo text default null;";
+    private static final String SENTENCIA_ACTUALIZACION_TABLA_CONTACTOS = "UPDATE contactos";
 
-    private static final String SENTENCIA_SELECCION_CONTACTOS = "SELECT _id, nombre, telefono, email " +
-            "from contactos";
+    private static final String SENTENCIA_SELECCION_CONTACTOS = "select * from contactos";
+
+    public static final String SENTENCIA_INSERCION_CONTACTOS = "insert into contactos (nombre, telefono, email)";
 
     //Constructor
     public DBConexion(@Nullable Context context) {
@@ -54,7 +54,7 @@ public class DBConexion extends SQLiteOpenHelper {
     }
 
     public ArrayList<Contacto> selectContactos (SQLiteDatabase db) {
-        ArrayList<Contacto> contactos = new ArrayList<Contacto>();
+        ArrayList<Contacto> contactos = new ArrayList<>();
 
         //Consultamos los datos
         Cursor c = db.rawQuery(SENTENCIA_SELECCION_CONTACTOS, null);
@@ -71,7 +71,7 @@ public class DBConexion extends SQLiteOpenHelper {
 
                 Contacto contactoExtraidoBD = new Contacto(nombre, email, telefono, 1);
                 contactos.add(contactoExtraidoBD);
-            } while (c.moveToFirst());
+            } while (c.moveToNext());
         }
 
         c.close();
@@ -84,6 +84,7 @@ public class DBConexion extends SQLiteOpenHelper {
         valores.put("nombre", contacto.getNombre());
         valores.put("telefono", contacto.getTelefono());
         valores.put("email", contacto.getEmail());
+
 
         db.insert(TABLA_CONTACTOS, null, valores);
     }
